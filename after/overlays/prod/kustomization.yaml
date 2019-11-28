@@ -1,0 +1,24 @@
+resources:
+- ../../base
+patchesJson6902:
+- target:
+    group: extensions
+    version: v1beta1
+    kind: Ingress
+    name: nginx
+  path: ingress_patch.yaml
+commonLabels:
+  app: prod-nginx
+namespace: dev
+replicas:
+- name: nginx
+  count: 3
+images:
+- name: nginx
+  newTag: 6b654da03c0e
+namePrefix: prod-
+configMapGenerator:
+- name: nginx
+  behavior: merge
+  literals:
+  - ENV=prod

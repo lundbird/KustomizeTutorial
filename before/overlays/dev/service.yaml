@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: nginx
 spec:
+  selector:
+    app: dev-nginx
   ports:
   - name: http-app
     port: 80

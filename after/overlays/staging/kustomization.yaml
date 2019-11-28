@@ -1,0 +1,17 @@
+resources:
+- ../../base
+patchesJson6902:
+- target:
+    group: extensions
+    version: v1beta1
+    kind: Ingress
+    name: nginx
+  path: ingress_patch.yaml
+commonLabels:
+  app: staging-nginx
+namespace: staging
+configMapGenerator:
+- name: nginx
+  behavior: merge
+  literals:
+  - ENV=staging

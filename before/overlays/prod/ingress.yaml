@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: office
+  annotations:
+    ingress.kubernetes.io/whitelist-source-range: "0.0.0.0/0"
+    ingress.kubernetes.io/whitelist-x-forwarded-for: "true"
+spec:
+  rules:
+  - host: prod-nginx.mydomain.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx
+          servicePort: http
+        path: /
