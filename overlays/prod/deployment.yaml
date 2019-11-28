@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  metadata:
+    labels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - imagePullPolicy: Always
+        env:
+        - name: DB_HOST
+          value: postgres
+        - name: PORT
+          value: '8001'
+        - name: ENV
+          value: prod
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+        name: nginx
+        image: nginx:6b654da03c0e
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: nginx-conf
+      imagePullSecrets:
+      - name: gitlab
+      volumes:
+      - configMap:
+          items:
+          - key: default.conf
+            path: default.conf
+          name: nginx
+        name: nginx-conf
